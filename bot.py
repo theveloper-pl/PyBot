@@ -7,7 +7,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
-client = discord.Client(intents=discord.Intents.default())
+client = discord.Client(intents=discord.Intents.all())
 
 @client.event
 async def on_ready():
@@ -35,12 +35,17 @@ async def on_message(message):
             'no doubt no doubt no doubt no doubt.'
         ),
     ]
-    print(message)
-    print(message.content)
-    
+    print(f"Message: {message}\n")
+    print(f"Content: {message.clean_content}\n")
+
     if message.content == '99!':
         response = random.choice(brooklyn_99_quotes)
         await message.channel.send(response)
     
-        
+    channels = client.get_all_channels()
+    for chan in channels:
+        print(f"Channel {chan} with id {chan.id}")
+    log_channel = client.get_channel(1061399068183646311)
+    await log_channel.send(f"Message Author : {message.author} wrote {message.content}")
+
 client.run(TOKEN)
